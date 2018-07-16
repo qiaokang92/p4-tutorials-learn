@@ -4,7 +4,7 @@
 
 In this exercise, we will add support for a basic tunneling protocol
 to the IP router that you completed in the previous assignment. To do so,
-we will define a new header type to encapsulate the IP packet and 
+we will define a new header type to encapsulate the IP packet and
 modify the switch to perform routing using our new header.
 
 The new header type will contain a protocol ID, which indicates the type
@@ -17,7 +17,7 @@ routing.
 
 ## Step 1: Run the (incomplete) starter code
 
-The starter code for this assignment is in a file called `basic_tunnel.p4` 
+The starter code for this assignment is in a file called `basic_tunnel.p4`
 and is simply the solution to the IP router from the previous exercise.
 
 Let's first compile this code to and send a packet between two end hosts
@@ -51,7 +51,7 @@ server. In `h2`'s xterm, start the server:
    The packet should be received at `h2`. If you examine the received
    packet you should see that is consists of an Ethernet header, an IP
    header, a TCP header, and the message. If you change the destination IP address
-   (e.g. try to send to `10.0.3.3`) then the message should not be 
+   (e.g. try to send to `10.0.3.3`) then the message should not be
    received by h2.
 5. Type `exit` or `Ctrl-D` to leave each xterm and the Mininet command line.
 
@@ -67,9 +67,9 @@ matches a packet, its action is invoked with parameters supplied by
 the control plane as part of the rule.
 
 For this exercise, we have already added the necessary static control
-plane entries. As part of bringing up the Mininet instance, the 
+plane entries. As part of bringing up the Mininet instance, the
 `make run` command will install packet-processing rules in the tables
-of each switch. These are defined in the `sX-commands.txt` files, 
+of each switch. These are defined in the `sX-commands.txt` files,
 where `X` corresponds to the switch number.
 
 **Important:** A P4 program also defines the interface between the
@@ -113,8 +113,8 @@ You should see a packet arrive at `h2` which contains the `MyTunnel` header.
 Also note that changing the destination IP address will not prevent the packet
 from arriving at `h2`. This is because the switch is no longer using the IP header for routing when the `MyTunnel` header is in the packet.
 
-> Python Scapy does not natively support the `myTunnel` header 
-> type so we have provided a file called `myTunnel_header.py` which 
+> Python Scapy does not natively support the `myTunnel` header
+> type so we have provided a file called `myTunnel_header.py` which
 > adds support to Scapy for our new custom header. Feel free to inspect
 > this file if you are interested in learning how to do this.
 
@@ -140,7 +140,7 @@ report the error emitted from the compiler and halt.
 2. `basic_tunnel.p4` might compile but fail to support the control plane
 rules in the `s1-commands.txt` through `s3-command.txt` files that
 `make run` tries to install using the Bmv2 CLI. In this case, `make run`
-will log the CLI tool output in the `logs` directory. Use these error 
+will log the CLI tool output in the `logs` directory. Use these error
 messages to fix your `basic_tunnel.p4` implementation or forwarding rules.
 
 3. `basic_tunnel.p4` might compile, and the control plane rules might be
