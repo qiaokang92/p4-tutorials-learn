@@ -9,7 +9,7 @@ Multi-Hop Route Inspection (MRI).
 MRI allows users to track the path and the length of queues that every
 packet travels through.  To support this functionality, you will need
 to write a P4 program that appends an ID and queue length to the
-header stack of every packet.  At the destination, the sequence of
+header stack of every packet. At the destination, the sequence of
 switch IDs correspond to the path, and each ID is followed by the
 queue length of the port at switch.
 
@@ -37,7 +37,7 @@ switch in Mininet to test its behavior.
    * compile `mri.p4`, and
    * start a Mininet instance with three switches (`s1`, `s2`, `s3`) configured
      in a triangle. There are 5 hosts. `h1` and `h11` are connected to `s1`.
-     `h2` and `h22` are connected to `s2` and `h3` is connected to `s3`.     
+     `h2` and `h22` are connected to `s2` and `h3` is connected to `s3`.
    * The hosts are assigned IPs of `10.0.1.1`, `10.0.2.2`, etc
      (`10.0.<Switchid>.<hostID>`).
    * The control plane programs the P4 tables in each switch based on
@@ -128,7 +128,7 @@ store the switch ID and queue depth, and actions that increment the
 A complete `mri.p4` will contain the following components:
 
 1. Header type definitions for Ethernet (`ethernet_t`), IPv4 (`ipv4_t`),
-   IP Options (`ipv4_option_t`), MRI (`mri_t`), and Switch (`switch_t`). 
+   IP Options (`ipv4_option_t`), MRI (`mri_t`), and Switch (`switch_t`).
 2. Parsers for Ethernet, IPv4, IP Options, MRI, and Switch that will
 populate `ethernet_t`, `ipv4_t`, `ipv4_option_t`, `mri_t`, and
 `switch_t`.
@@ -136,8 +136,8 @@ populate `ethernet_t`, `ipv4_t`, `ipv4_option_t`, `mri_t`, and
 4. An action (called `ipv4_forward`), which will:
 	1. Set the egress port for the next hop.
 	2. Update the ethernet destination address with the address of
-	the next hop.	
-	3. Update the ethernet source address with the address of the switch. 
+	the next hop.
+	3. Update the ethernet source address with the address of the switch.
 	4. Decrement the TTL.
 5. An ingress control that:
     1. Defines a table that will read an IPv4 destination address, and
