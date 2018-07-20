@@ -103,7 +103,7 @@ A complete `ecn.p4` will contain the following components:
 	1. Set the egress port for the next hop.
 	2. Update the ethernet destination address with the address of
            the next hop.
-	3. Update the ethernet source address with the address of the switch. 
+	3. Update the ethernet source address with the address of the switch.
 	4. Decrement the TTL.
 5. An egress control block that checks the ECN and
 `standard_metadata.enq_qdepth` and sets the ipv4.ecn.
@@ -165,7 +165,7 @@ There are several ways that problems might manifest:
    error emitted from the compiler and stop.
 2. `ecn.p4` compiles but does not support the control plane rules in
    the `sX-commands.txt` files that `make` tries to install using
-   the BMv2 CLI.  In this case, `make` will log the CLI tool output 
+   the BMv2 CLI.  In this case, `make` will log the CLI tool output
    in the `logs` directory. Use these error messages to fix your `ecn.p4`
    implementation.
 3. `ecn.p4` compiles, and the control plane rules are installed, but
