@@ -60,7 +60,7 @@ bring up a network in Mininet to test its behavior.
 5. Type a list of port numbers. say `2 3 2 2 1`.  This should send the
    packet through `h1`, `s1`, `s2`, `s3`, `s1`, `s2`, and
    `h2`. However, `h2` will not receive the message.
-   
+
 6. Type `q` to exit send.py and type `exit` to leave each xterm and
    the Mininet command line.
 
@@ -84,7 +84,7 @@ A complete `source_routing.p4` will contain the following components:
    `ethernet` and `srcRoutes` fields.
 3. An action to drop a packet, using `mark_to_drop()`.
 4. **TODO:** An action (called `srcRoute_nhop`), which will:
-	1. Set the egress port for the next hop. 
+	1. Set the egress port for the next hop.
 	2. remove the first entry of srcRoutes
 5. A control with an `apply` block that:
     1. checks the existence of source routes.

@@ -60,7 +60,7 @@ parser MyParser(packet_in packet,
                 inout metadata meta,
                 inout standard_metadata_t standard_metadata) {
 
-    
+
     state start {
         transition parse_ethernet;
     }
@@ -72,7 +72,10 @@ parser MyParser(packet_in packet,
          * If the value is TYPE_SRCROUTING transition to parse_srcRouting
          * otherwise transition to accept.
          */
-        transition accept;
+        transition select(hdr.ethernet.etherType) {
+           TYPE_IPV4        :  parse_ipv4;
+           TYPE_SRCROUTING  :  parse_srcRouting;
+        }
     }
 
     state parse_srcRouting {
@@ -81,7 +84,11 @@ parser MyParser(packet_in packet,
          * while hdr.srcRoutes.last.bos is 0 transition to this state
          * otherwise parse ipv4
          */
-        transition accept;
+         packet.extract(hdr.srcRoutes.next);
+         transition select(hdr.srcRoutes.last.bos) {
+            0       :   parse_srcRouting;
+            default :   parse_ipv4;
+         }
     }
 
     state parse_ipv4 {
@@ -96,7 +103,7 @@ parser MyParser(packet_in packet,
 ************   C H E C K S U M    V E R I F I C A T I O N   *************
 *************************************************************************/
 
-control MyVerifyChecksum(inout headers hdr, inout metadata meta) {   
+control MyVerifyChecksum(inout headers hdr, inout metadata meta) {
     apply {  }
 }
 
@@ -112,13 +119,15 @@ control MyIngress(inout headers hdr,
     action drop() {
         mark_to_drop();
     }
-    
+
     action srcRoute_nhop() {
         /*
-         * TODO: set standard_metadata.egress_spec 
+         * TODO: set standard_metadata.egress_spec
          * to the port in hdr.srcRoutes[0] and
          * pop an entry from hdr.srcRoutes
          */
+         standard_metadata.egress_spec = (bit<9>)hdr.srcRoutes[0].port;
+         hdr.srcRoutes.pop_front(1);
     }
 
     action srcRoute_finish() {
@@ -128,22 +137,27 @@ control MyIngress(inout headers hdr,
     action update_ttl(){
         hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
-    
+
     apply {
-        if (hdr.srcRoutes[0].isValid()){
-            /*
-             * TODO: add logic to:
-             * - If final srcRoutes (top of stack has bos==1):
-             *   - change etherType to IP
-             * - choose next hop and remove top of srcRoutes stack
-             */
+        if (hdr.srcRoutes[0].isValid()) {
+           /*
+            * TODO: add logic to:
+            * - If final srcRoutes (top of stack has bos==1):
+            *   - change etherType to IP
+            * - choose next hop and remove top of srcRoutes stack
+            */
+            if (hdr.srcRoutes[0].bos == 1) {
+               srcRoute_finish();
+            }
+
+            srcRoute_nhop();
 
             if (hdr.ipv4.isValid()){
-                update_ttl();
+               update_ttl();
             }
-        }else{
+        } else {
             drop();
-        } 
+        }
     }
 }
 
